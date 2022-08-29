@@ -13,14 +13,18 @@ import javax.ws.rs.WebApplicationException;
 
 import org.eclipse.microprofile.faulttolerance.exceptions.CircuitBreakerOpenException;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 import io.quarkus.sample.superheroes.fight.HeroesVillainsWiremockServerResource;
 import io.quarkus.sample.superheroes.fight.InjectWireMock;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 
+import com.atlassian.ta.wiremockpactgenerator.WireMockPactGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.WireMockServer;
@@ -34,6 +38,7 @@ import io.smallrye.mutiny.helpers.test.UniAssertSubscriber;
  */
 @QuarkusTest
 @QuarkusTestResource(HeroesVillainsWiremockServerResource.class)
+@TestInstance(Lifecycle.PER_CLASS)
 class VillainClientTests {
   private static final String VILLAIN_API_BASE_URI = "/api/villains";
   private static final String VILLAIN_API = VILLAIN_API_BASE_URI + "/random";
@@ -71,6 +76,18 @@ class VillainClientTests {
   public void afterEach() {
     // Reset all circuit breaker counts after each test
     this.circuitBreakerMaintenance.resetAll();
+  }
+
+  @BeforeAll
+  public void beforeAll() {
+    this.wireMockServer.addMockServiceRequestListener(
+      WireMockPactGenerator
+        .builder("rest-fights", "rest-villains")
+        .withIncludeNotConfiguredResponses(false)
+        .withRequestPathIncludeList(String.format("%s/.*", VILLAIN_API_BASE_URI))
+        .withRequestHeaderIncludeList(ACCEPT)
+        .build()
+    );
   }
 
   @Test
