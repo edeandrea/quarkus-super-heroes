@@ -12,11 +12,12 @@
     <mapstruct.version>1.5.2.Final</mapstruct.version>
     <maven.compiler.parameters>true</maven.compiler.parameters>
     <maven.compiler.release>11</maven.compiler.release>
+    <pact.version>4.3.14</pact.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
     <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
-    <quarkus.platform.version>2.11.3.Final</quarkus.platform.version>
+    <quarkus.platform.version>2.12.2.Final</quarkus.platform.version>
     <surefire-plugin.version>3.0.0-M7</surefire-plugin.version>
     <wiremock.version>2.33.2</wiremock.version>
     <wiremock-pact.version>2.5.0</wiremock-pact.version>
@@ -200,6 +201,12 @@
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-test-kafka-companion</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>au.com.dius.pact.consumer</groupId>
+      <artifactId>junit5</artifactId>
+      <version>${pact.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
