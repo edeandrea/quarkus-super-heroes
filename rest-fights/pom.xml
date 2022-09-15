@@ -20,7 +20,6 @@
     <quarkus.platform.version>2.12.2.Final</quarkus.platform.version>
     <surefire-plugin.version>3.0.0-M7</surefire-plugin.version>
     <wiremock.version>2.33.2</wiremock.version>
-    <wiremock-pact.version>2.5.0</wiremock-pact.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -185,12 +184,6 @@
       <groupId>com.github.tomakehurst</groupId>
       <artifactId>wiremock-jre8</artifactId>
       <version>${wiremock.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.atlassian.ta</groupId>
-      <artifactId>wiremock-pact-generator</artifactId>
-      <version>${wiremock-pact.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
