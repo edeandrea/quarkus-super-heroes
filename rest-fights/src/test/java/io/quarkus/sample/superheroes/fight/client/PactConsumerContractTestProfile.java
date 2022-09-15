@@ -17,7 +17,7 @@ import io.quarkus.test.junit.QuarkusTestProfile;
  *   Quarkus itself is set to run its tests on a random port, so port {@code 8081} should be available.
  * </p>
  */
-public class PactConsumerTestProfile implements QuarkusTestProfile {
+public class PactConsumerContractTestProfile implements QuarkusTestProfile {
   // Make an assumption and hard-code the Pact MockServer to be running on port 8081
   // I don't like it but couldn't figure out any other way
   private static final String URL = "localhost:8081";
@@ -32,7 +32,7 @@ public class PactConsumerTestProfile implements QuarkusTestProfile {
 
   @Override
   public String getConfigProfile() {
-    return "pact-consumer";
+    return "pact-consumer-contract";
   }
 
   @Override

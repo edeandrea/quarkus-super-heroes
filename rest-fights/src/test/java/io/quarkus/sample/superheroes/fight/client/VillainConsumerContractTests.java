@@ -25,7 +25,7 @@ import au.com.dius.pact.core.model.annotations.Pact;
  * Pact consumer contract tests for the {@link VillainClient}.
  */
 @QuarkusTest
-@TestProfile(PactConsumerTestProfile.class)
+@TestProfile(PactConsumerContractTestProfile.class)
 @ExtendWith(PactConsumerTestExt.class)
 @PactTestFor(
   providerName = "rest-villains",
