@@ -1,7 +1,5 @@
 package io.quarkus.sample.superheroes.fight.client;
 
-import static au.com.dius.pact.consumer.dsl.LambdaDsl.newJsonBody;
-
 import javax.ws.rs.HttpMethod;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
@@ -44,45 +42,44 @@ public class VillainConsumerContractTests extends VillainClientTestRunner {
         .method(HttpMethod.GET)
         .headers(HttpHeaders.ACCEPT, MediaType.TEXT_PLAIN)
       .willRespondWith()
-        .matchHeader(HttpHeaders.CONTENT_TYPE, "text\\/plain", MediaType.TEXT_PLAIN)
+        .matchHeader(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN, MediaType.TEXT_PLAIN)
         .status(Status.OK.getStatusCode())
         .body(PactDslRootValue.stringType(DEFAULT_HELLO_RESPONSE))
       .toPact(V4Pact.class);
   }
 
-  @Pact(consumer = "rest-fights")
-  public V4Pact randomVillainNotFoundPact(PactDslWithProvider builder) {
-    return builder
-      .given("No random villain found")
-      .uponReceiving("A request for a random villain")
-        .path(VILLAIN_RANDOM_URI)
-        .method(HttpMethod.GET)
-        .headers(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON)
-      .willRespondWith()
-        .status(Status.NOT_FOUND.getStatusCode())
-      .toPact(V4Pact.class);
-  }
-
-  @Pact(consumer = "rest-fights")
-  public V4Pact randomVillainFoundPact(PactDslWithProvider builder) {
-    return builder
-      .given("Random villain found")
-      .uponReceiving("A request for a random villain")
-        .path(VILLAIN_RANDOM_URI)
-        .method(HttpMethod.GET)
-        .headers(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON)
-      .willRespondWith()
-        .status(Status.OK.getStatusCode())
-        .matchHeader(HttpHeaders.CONTENT_TYPE, "application\\/json", MediaType.APPLICATION_JSON)
-        .body(newJsonBody(body ->
-            body
-              .stringType("name", DEFAULT_VILLAIN_NAME)
-              .integerType("level", DEFAULT_VILLAIN_LEVEL)
-              .stringType("picture", DEFAULT_VILLAIN_PICTURE)
-          ).build()
-        )
-      .toPact(V4Pact.class);
-  }
+//  @Pact(consumer = "rest-fights")
+//  public RequestResponsePact randomVillainNotFoundPact(PactDslWithProvider builder) {
+//    return builder
+//      .given("No random villain found")
+//      .uponReceiving("A request for a random villain")
+//        .path(VILLAIN_RANDOM_URI)
+//        .method(HttpMethod.GET)
+//        .headers(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON)
+//      .willRespondWith()
+//        .status(Status.NOT_FOUND.getStatusCode())
+//      .toPact();
+//  }
+//
+//  @Pact(consumer = "rest-fights")
+//  public RequestResponsePact randomVillainFoundPact(PactDslWithProvider builder) {
+//    return builder
+//      .uponReceiving("A request for a random villain")
+//        .path(VILLAIN_RANDOM_URI)
+//        .method(HttpMethod.GET)
+//        .headers(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON)
+//      .willRespondWith()
+//        .status(Status.OK.getStatusCode())
+//        .matchHeader(HttpHeaders.CONTENT_TYPE, "application/json", MediaType.APPLICATION_JSON)
+//        .body(newJsonBody(body ->
+//            body
+//              .stringType("name", DEFAULT_VILLAIN_NAME)
+//              .integerType("level", DEFAULT_VILLAIN_LEVEL)
+//              .stringType("picture", DEFAULT_VILLAIN_PICTURE)
+//          ).build()
+//        )
+//      .toPact();
+//  }
 
   @Test
   @PactTestFor(pactMethod = "helloPact")
@@ -90,15 +87,15 @@ public class VillainConsumerContractTests extends VillainClientTestRunner {
     runHelloVillains();
   }
 
-  @Test
-  @PactTestFor(pactMethod = "randomVillainNotFoundPact")
-  void randomVillainNotFound() {
-    runRandomVillainNotFound();
-  }
-
-  @Test
-  @PactTestFor(pactMethod = "randomVillainFoundPact")
-  void randomVillainFound() {
-    runRandomVillainFound(false);
-  }
+//  @Test
+//  @PactTestFor(pactMethod = "randomVillainNotFoundPact")
+//  void randomVillainNotFound() {
+//    runRandomVillainNotFound();
+//  }
+//
+//  @Test
+//  @PactTestFor(pactMethod = "randomVillainFoundPact")
+//  void randomVillainFound() {
+//    runRandomVillainFound(false);
+//  }
 }

@@ -44,7 +44,7 @@ public class HeroConsumerContractTests extends HeroClientTestRunner {
         .method(HttpMethod.GET)
         .headers(HttpHeaders.ACCEPT, MediaType.TEXT_PLAIN)
       .willRespondWith()
-        .matchHeader(HttpHeaders.CONTENT_TYPE, "text\\/plain", MediaType.TEXT_PLAIN)
+        .matchHeader(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN, MediaType.TEXT_PLAIN)
         .status(Status.OK.getStatusCode())
         .body(PactDslRootValue.stringType(DEFAULT_HELLO_RESPONSE))
       .toPact(V4Pact.class);
@@ -66,14 +66,13 @@ public class HeroConsumerContractTests extends HeroClientTestRunner {
   @Pact(consumer = "rest-fights")
   public V4Pact randomHeroFoundPact(PactDslWithProvider builder) {
     return builder
-      .given("Random hero found")
       .uponReceiving("A request for a random hero")
         .path(HERO_RANDOM_URI)
         .method(HttpMethod.GET)
         .headers(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON)
       .willRespondWith()
         .status(Status.OK.getStatusCode())
-        .matchHeader(HttpHeaders.CONTENT_TYPE, "application\\/json", MediaType.APPLICATION_JSON)
+        .matchHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON, MediaType.APPLICATION_JSON)
         .body(newJsonBody(body ->
             body
               .stringType("name", DEFAULT_HERO_NAME)

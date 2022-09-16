@@ -6,12 +6,14 @@ import org.junit.jupiter.api.TestTemplate;
 import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
 
 import au.com.dius.pact.provider.junit5.HttpTestTarget;
 import au.com.dius.pact.provider.junit5.PactVerificationContext;
 import au.com.dius.pact.provider.junit5.PactVerificationInvocationContextProvider;
 import au.com.dius.pact.provider.junitsupport.Provider;
+import au.com.dius.pact.provider.junitsupport.State;
 import au.com.dius.pact.provider.junitsupport.loader.PactBroker;
 import au.com.dius.pact.provider.junitsupport.loader.PactBrokerConsumerVersionSelectors;
 import au.com.dius.pact.provider.junitsupport.loader.SelectorBuilder;
@@ -20,6 +22,7 @@ import au.com.dius.pact.provider.junitsupport.loader.SelectorBuilder;
 @Provider("rest-villains")
 @PactBroker(url = "https://quarkus-super-heroes.pactflow.io")
 @EnabledIfSystemProperty(named = "pactbroker.auth.token", matches = ".+", disabledReason = "pactbroker.auth.token system property not set")
+//@TestTransaction
 public class ContractVerificationTests {
   @ConfigProperty(name = "quarkus.http.test-port")
   int quarkusPort;
@@ -40,4 +43,9 @@ public class ContractVerificationTests {
     return new SelectorBuilder()
       .branch(System.getProperty("pactbroker.consumer.branch", "main"));
   }
+
+//  @State("No random villain found")
+//  public void clearData() {
+//    Villain.deleteAll();
+//  }
 }
