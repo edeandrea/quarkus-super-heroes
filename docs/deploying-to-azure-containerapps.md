@@ -16,6 +16,7 @@
         - [Statistics Microservice](#statistics-microservice)
         - [Fights microservice](#fights-microservice)
         - [Super Hero UI](#super-hero-ui)
+- [Load Testing](#Load-testing)
 - [Miscellaneous](#miscellaneous)
 - [References](#references)
 
@@ -729,6 +730,37 @@ az staticwebapp secrets list  \
   --name $UI_APP \
   --output table
 ```
+
+# Load Testing
+
+super-heroes-load-testing
+
+![load-testing-1-marketplace](../images/load-testing-1-marketplace.png)
+
+![load-testing-2-create](../images/load-testing-2-create.png)
+
+![load-testing-3-list](../images/load-testing-3-list.png)
+
+![load-testing-4-upload-jmeter](../images/load-testing-4-upload-jmeter.png)
+
+![load-testing-5-create-test-1](../images/load-testing-5-create-test-1.png)
+
+```properties
+LOOPS=20
+THREADS=2
+RAMP=1
+
+# Azure
+FIGHT_PROTOCOL=https
+FIGHT_HOST=rest-fights.kindocean-1cba89db.eastus.azurecontainerapps.io
+FIGHT_PORT=443
+```
+
+![load-testing-5-create-test-2](../images/load-testing-5-create-test-2.png)
+
+![load-testing-6-stats](../images/load-testing-6-stats.png)
+
+![load-testing-7-scale](../images/load-testing-7-scale.png)
 
 # Miscellaneous
 
