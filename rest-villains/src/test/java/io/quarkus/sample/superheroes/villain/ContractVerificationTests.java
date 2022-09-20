@@ -1,13 +1,18 @@
 package io.quarkus.sample.superheroes.villain;
 
+import static org.mockito.Mockito.when;
+
+import java.util.Optional;
+
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestTemplate;
 import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import io.quarkus.test.TestTransaction;
+import io.quarkus.sample.superheroes.villain.service.VillainService;
 import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.mockito.InjectSpy;
 
 import au.com.dius.pact.provider.junit5.HttpTestTarget;
 import au.com.dius.pact.provider.junit5.PactVerificationContext;
@@ -27,6 +32,9 @@ public class ContractVerificationTests {
   @ConfigProperty(name = "quarkus.http.test-port")
   int quarkusPort;
 
+  @InjectSpy
+  VillainService villainService;
+
   @TestTemplate
   @ExtendWith(PactVerificationInvocationContextProvider.class)
   void pactVerificationTestTemplate(PactVerificationContext context) {
@@ -44,8 +52,9 @@ public class ContractVerificationTests {
       .branch(System.getProperty("pactbroker.consumer.branch", "main"));
   }
 
-//  @State("No random villain found")
-//  public void clearData() {
-//    Villain.deleteAll();
-//  }
+  @State("No random villain found")
+  public void clearData() {
+    when(this.villainService.findRandomVillain())
+      .thenReturn(Optional.empty());
+  }
 }
