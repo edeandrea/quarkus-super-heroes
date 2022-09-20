@@ -2,6 +2,7 @@ package io.quarkus.sample.superheroes.villain;
 
 import static org.mockito.Mockito.when;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -10,9 +11,8 @@ import org.junit.jupiter.api.TestTemplate;
 import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import io.quarkus.sample.superheroes.villain.service.VillainService;
+import io.quarkus.panache.mock.PanacheMock;
 import io.quarkus.test.junit.QuarkusTest;
-import io.quarkus.test.junit.mockito.InjectSpy;
 
 import au.com.dius.pact.provider.junit5.HttpTestTarget;
 import au.com.dius.pact.provider.junit5.PactVerificationContext;
@@ -27,13 +27,11 @@ import au.com.dius.pact.provider.junitsupport.loader.SelectorBuilder;
 @Provider("rest-villains")
 @PactBroker(url = "https://quarkus-super-heroes.pactflow.io")
 @EnabledIfSystemProperty(named = "pactbroker.auth.token", matches = ".+", disabledReason = "pactbroker.auth.token system property not set")
-//@TestTransaction
 public class ContractVerificationTests {
+  private static final String NO_RANDOM_VILLAIN_FOUND_STATE = "No random villain found";
+
   @ConfigProperty(name = "quarkus.http.test-port")
   int quarkusPort;
-
-  @InjectSpy
-  VillainService villainService;
 
   @TestTemplate
   @ExtendWith(PactVerificationInvocationContextProvider.class)
@@ -44,6 +42,21 @@ public class ContractVerificationTests {
   @BeforeEach
   void beforeEach(PactVerificationContext context) {
     context.setTarget(new HttpTestTarget("localhost", this.quarkusPort));
+
+    // Have to do this here because the CDI context doesn't seem to be available
+    // in the @State method below
+    var isNoRandomVillainFoundState = Optional.ofNullable(context.getInteraction().getProviderStates())
+      .orElseGet(List::of)
+      .stream()
+      .filter(state -> NO_RANDOM_VILLAIN_FOUND_STATE.equals(state.getName()))
+      .count() > 0;
+
+    if (isNoRandomVillainFoundState) {
+      PanacheMock.mock(Villain.class);
+
+		  when(Villain.findRandom())
+        .thenReturn(Optional.empty());
+    }
   }
 
   @PactBrokerConsumerVersionSelectors
@@ -52,9 +65,8 @@ public class ContractVerificationTests {
       .branch(System.getProperty("pactbroker.consumer.branch", "main"));
   }
 
-  @State("No random villain found")
+  @State(NO_RANDOM_VILLAIN_FOUND_STATE)
   public void clearData() {
-    when(this.villainService.findRandomVillain())
-      .thenReturn(Optional.empty());
+    // Already handled in beforeEach
   }
 }

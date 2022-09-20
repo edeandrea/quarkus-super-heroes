@@ -2,6 +2,8 @@ package io.quarkus.sample.superheroes.fight.client;
 
 import static au.com.dius.pact.consumer.dsl.LambdaDsl.newJsonBody;
 
+import java.util.Map;
+
 import javax.ws.rs.HttpMethod;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
@@ -44,9 +46,9 @@ public class HeroConsumerContractTests extends HeroClientTestRunner {
         .method(HttpMethod.GET)
         .headers(HttpHeaders.ACCEPT, MediaType.TEXT_PLAIN)
       .willRespondWith()
-        .matchHeader(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN, MediaType.TEXT_PLAIN)
+        .headers(Map.of(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN))
         .status(Status.OK.getStatusCode())
-        .body(PactDslRootValue.stringType(DEFAULT_HELLO_RESPONSE))
+        .body(PactDslRootValue.stringMatcher(".+", DEFAULT_HELLO_RESPONSE))
       .toPact(V4Pact.class);
   }
 
@@ -72,7 +74,7 @@ public class HeroConsumerContractTests extends HeroClientTestRunner {
         .headers(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON)
       .willRespondWith()
         .status(Status.OK.getStatusCode())
-        .matchHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON, MediaType.APPLICATION_JSON)
+        .headers(Map.of(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
         .body(newJsonBody(body ->
             body
               .stringType("name", DEFAULT_HERO_NAME)
