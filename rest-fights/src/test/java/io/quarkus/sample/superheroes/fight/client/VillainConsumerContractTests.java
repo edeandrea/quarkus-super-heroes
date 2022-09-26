@@ -10,6 +10,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response.Status;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import io.quarkus.test.junit.QuarkusTest;
@@ -37,6 +38,7 @@ import au.com.dius.pact.core.model.annotations.Pact;
   // I don't like it but couldn't figure out any other way
   port = "8081"
 )
+@EnabledIfSystemProperty(named = "runConsumerContractTests", matches = "true", disabledReason = "runConsumerContractTests system property not set or equals false")
 public class VillainConsumerContractTests extends VillainClientTestRunner {
   @Pact(consumer = "rest-fights")
   public V4Pact helloPact(PactDslWithProvider builder) {
