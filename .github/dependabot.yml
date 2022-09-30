@@ -5,8 +5,6 @@ updates:
     open-pull-requests-limit: 10
     schedule:
       interval: daily
-    labels:
-      - "version-upgrade"
     pull-request-branch-name:
       separator: "_"
     ignore:
@@ -19,9 +17,6 @@ updates:
     schedule:
       interval: daily
     target-branch: rhbq-2.7
-    labels:
-      - "version-upgrade"
-      - "rhbq"
     pull-request-branch-name:
       separator: "_"
     ignore:
@@ -33,8 +28,6 @@ updates:
     open-pull-requests-limit: 10
     schedule:
       interval: daily
-    labels:
-      - "version-upgrade"
     pull-request-branch-name:
       separator: "_"
 
@@ -44,18 +37,26 @@ updates:
     schedule:
       interval: daily
     target-branch: rhbq-2.7
-    labels:
-      - "version-upgrade"
-      - "rhbq"
     pull-request-branch-name:
       separator: "_"
-      
-#  - package-ecosystem: npm
-#    directory: /ui-super-heroes
-#    open-pull-requests-limit: 10
-#    schedule:
-#      interval: daily
-#    labels:
-#      - "version-upgrade"
-#    pull-request-branch-name:
-#      separator: "_"
+
+  #--------- for Pact branch ------------
+  - package-ecosystem: maven
+    directory: /
+    open-pull-requests-limit: 10
+    schedule:
+      interval: daily
+    target-branch: pact
+    pull-request-branch-name:
+      separator: "_"
+    ignore:
+      - dependency-name: org.apache.maven.plugins:maven-compiler-plugin
+
+  - package-ecosystem: github-actions
+    directory: /
+    open-pull-requests-limit: 10
+    schedule:
+      interval: daily
+    target-branch: pact
+    pull-request-branch-name:
+      separator: "_"
