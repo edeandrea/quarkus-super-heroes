@@ -1,7 +1,7 @@
 name: Quarkus 3 build
 
 env:
-  MANDREL_VERSION: "22.3.0.1-Final"
+  MANDREL_VERSION: "22.3.1.0-Final"
 
 on:
   push:
