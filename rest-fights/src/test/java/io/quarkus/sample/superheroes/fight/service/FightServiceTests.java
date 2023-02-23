@@ -8,11 +8,11 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
 
-import javax.enterprise.inject.Any;
-import javax.inject.Inject;
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
-import javax.ws.rs.InternalServerErrorException;
+import jakarta.enterprise.inject.Any;
+import jakarta.inject.Inject;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.ws.rs.InternalServerErrorException;
 
 import org.bson.types.ObjectId;
 import org.eclipse.microprofile.reactive.messaging.Message;
@@ -35,12 +35,12 @@ import io.quarkus.test.junit.mockito.InjectSpy;
 
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.helpers.test.UniAssertSubscriber;
-import io.smallrye.reactive.messaging.providers.connectors.InMemoryConnector;
+import io.smallrye.reactive.messaging.memory.InMemoryConnector;
 
 /**
  * Tests for the service layer ({@link FightService}).
  * <p>
- *   Uses an {@link InMemoryConnector} to represent the Kafka instance.
+ *   Uses an {@link io.smallrye.reactive.messaging.memory.InMemoryConnector} to represent the Kafka instance.
  * </p>
  */
 @QuarkusTest
@@ -73,7 +73,7 @@ class FightServiceTests {
 
 	@Inject
 	@Any
-  InMemoryConnector emitterConnector;
+	InMemoryConnector emitterConnector;
 
 	@InjectMock
 	HeroClient heroClient;

@@ -3,7 +3,7 @@ package io.quarkus.sample.superheroes.hero.repository;
 import java.util.List;
 import java.util.Random;
 
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 
 import io.quarkus.hibernate.reactive.panache.PanacheRepository;
 import io.quarkus.sample.superheroes.hero.Hero;

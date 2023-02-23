@@ -2,13 +2,13 @@ package io.quarkus.sample.superheroes.hero.service;
 
 import java.util.List;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.validation.ConstraintViolationException;
-import javax.validation.Valid;
-import javax.validation.Validator;
-import javax.validation.constraints.NotNull;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Valid;
+import jakarta.validation.Validator;
+import jakarta.validation.constraints.NotNull;
 
-import io.quarkus.hibernate.reactive.panache.common.runtime.ReactiveTransactional;
+import io.quarkus.hibernate.reactive.panache.common.WithTransaction;
 import io.quarkus.logging.Log;
 import io.quarkus.sample.superheroes.hero.Hero;
 import io.quarkus.sample.superheroes.hero.mapping.HeroFullUpdateMapper;
@@ -61,14 +61,14 @@ public class HeroService {
 		return this.heroRepository.findRandom();
 	}
 
-	@ReactiveTransactional
+	@WithTransaction
   @WithSpan("HeroService.persistHero")
 	public Uni<Hero> persistHero(@SpanAttribute("arg.hero") @NotNull @Valid Hero hero) {
     Log.debugf("Persisting hero: %s", hero);
 		return this.heroRepository.persist(hero);
 	}
 
-	@ReactiveTransactional
+	@WithTransaction
   @WithSpan("HeroService.replaceHero")
 	public Uni<Hero> replaceHero(@SpanAttribute("arg.hero") @NotNull @Valid Hero hero) {
     Log.debugf("Replacing hero: %s", hero);
@@ -79,7 +79,7 @@ public class HeroService {
 			});
 	}
 
-	@ReactiveTransactional
+	@WithTransaction
   @WithSpan("HeroService.partialUpdateHero")
 	public Uni<Hero> partialUpdateHero(@SpanAttribute("arg.hero") @NotNull Hero hero) {
     Log.debugf("Partially updating hero: %s", hero);
@@ -91,7 +91,7 @@ public class HeroService {
 			.onItem().ifNotNull().transform(this::validatePartialUpdate);
 	}
 
-  @ReactiveTransactional
+  @WithTransaction
   @WithSpan("HeroService.replaceAllHeroes")
   public Uni<Void> replaceAllHeroes(@SpanAttribute("arg.heroes") List<Hero> heroes) {
     Log.debug("Replacing all heroes");
@@ -115,7 +115,7 @@ public class HeroService {
 		return hero;
 	}
 
-	@ReactiveTransactional
+	@WithTransaction
   @WithSpan("HeroService.deleteAllHeroes")
 	public Uni<Void> deleteAllHeroes() {
     Log.debug("Deleting all heroes");
@@ -127,7 +127,7 @@ public class HeroService {
 			.replaceWithVoid();
 	}
 
-	@ReactiveTransactional
+	@WithTransaction
   @WithSpan("HeroService.deleteHero")
 	public Uni<Void> deleteHero(@SpanAttribute("arg.id") Long id) {
     Log.debugf("Deleting hero by id = %d", id);
