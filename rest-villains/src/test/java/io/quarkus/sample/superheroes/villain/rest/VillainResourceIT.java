@@ -114,7 +114,7 @@ public class VillainResourceIT {
 	@Order(DEFAULT_ORDER)
 	public void shouldNotPartiallyUpdateInvalidItem() {
 		var villain = new Villain();
-		villain.id = 1L;
+		villain.id = 50L;
 		villain.name = null;
 		villain.otherName = UPDATED_OTHER_NAME;
 		villain.picture = UPDATED_PICTURE;
