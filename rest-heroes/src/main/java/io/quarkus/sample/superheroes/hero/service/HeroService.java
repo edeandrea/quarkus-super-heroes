@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.Validator;
 import jakarta.validation.constraints.NotNull;
 
+import io.quarkus.hibernate.reactive.panache.common.WithSessionOnDemand;
 import io.quarkus.hibernate.reactive.panache.common.WithTransaction;
 import io.quarkus.logging.Log;
 import io.quarkus.sample.superheroes.hero.Hero;
@@ -38,24 +39,28 @@ public class HeroService {
 	}
 
   @WithSpan("HeroService.findAllHeroes")
+  @WithSessionOnDemand
 	public Uni<List<Hero>> findAllHeroes() {
     Log.debug("Getting all heroes");
 		return this.heroRepository.listAll();
 	}
 
   @WithSpan("HeroService.findAllHeroesHavingName")
+  @WithSessionOnDemand
   public Uni<List<Hero>> findAllHeroesHavingName(@SpanAttribute("arg.name") String name) {
     Log.debugf("Finding all heroes having name = %s", name);
     return this.heroRepository.listAllWhereNameLike(name);
   }
 
   @WithSpan("HeroService.findHeroById")
+  @WithSessionOnDemand
 	public Uni<Hero> findHeroById(@SpanAttribute("arg.id") Long id) {
     Log.debugf("Finding hero by id = %d", id);
 		return this.heroRepository.findById(id);
 	}
 
   @WithSpan("HeroService.findRandomHero")
+  @WithSessionOnDemand
 	public Uni<Hero> findRandomHero() {
     Log.debug("Finding a random hero");
 		return this.heroRepository.findRandom();
