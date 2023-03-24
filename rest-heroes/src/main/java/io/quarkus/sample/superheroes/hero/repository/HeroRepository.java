@@ -6,6 +6,7 @@ import java.util.Random;
 import jakarta.enterprise.context.ApplicationScoped;
 
 import io.quarkus.hibernate.reactive.panache.PanacheRepository;
+import io.quarkus.hibernate.reactive.panache.common.WithTransaction;
 import io.quarkus.sample.superheroes.hero.Hero;
 
 import io.smallrye.mutiny.Uni;
@@ -14,6 +15,7 @@ import io.smallrye.mutiny.Uni;
  * Repository class for managing data operations on a {@link Hero}.
  */
 @ApplicationScoped
+@WithTransaction
 public class HeroRepository implements PanacheRepository<Hero> {
 	public Uni<Hero> findRandom() {
 		return count()

@@ -8,8 +8,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.Validator;
 import jakarta.validation.constraints.NotNull;
 
-import io.quarkus.hibernate.reactive.panache.common.WithSessionOnDemand;
-import io.quarkus.hibernate.reactive.panache.common.WithTransaction;
 import io.quarkus.logging.Log;
 import io.quarkus.sample.superheroes.hero.Hero;
 import io.quarkus.sample.superheroes.hero.mapping.HeroFullUpdateMapper;
@@ -39,41 +37,35 @@ public class HeroService {
 	}
 
   @WithSpan("HeroService.findAllHeroes")
-  @WithSessionOnDemand
 	public Uni<List<Hero>> findAllHeroes() {
     Log.debug("Getting all heroes");
 		return this.heroRepository.listAll();
 	}
 
   @WithSpan("HeroService.findAllHeroesHavingName")
-  @WithSessionOnDemand
   public Uni<List<Hero>> findAllHeroesHavingName(@SpanAttribute("arg.name") String name) {
     Log.debugf("Finding all heroes having name = %s", name);
     return this.heroRepository.listAllWhereNameLike(name);
   }
 
   @WithSpan("HeroService.findHeroById")
-  @WithSessionOnDemand
 	public Uni<Hero> findHeroById(@SpanAttribute("arg.id") Long id) {
     Log.debugf("Finding hero by id = %d", id);
 		return this.heroRepository.findById(id);
 	}
 
   @WithSpan("HeroService.findRandomHero")
-  @WithSessionOnDemand
 	public Uni<Hero> findRandomHero() {
     Log.debug("Finding a random hero");
 		return this.heroRepository.findRandom();
 	}
 
-	@WithTransaction
   @WithSpan("HeroService.persistHero")
 	public Uni<Hero> persistHero(@SpanAttribute("arg.hero") @NotNull @Valid Hero hero) {
     Log.debugf("Persisting hero: %s", hero);
 		return this.heroRepository.persist(hero);
 	}
 
-	@WithTransaction
   @WithSpan("HeroService.replaceHero")
 	public Uni<Hero> replaceHero(@SpanAttribute("arg.hero") @NotNull @Valid Hero hero) {
     Log.debugf("Replacing hero: %s", hero);
@@ -84,7 +76,6 @@ public class HeroService {
 			});
 	}
 
-	@WithTransaction
   @WithSpan("HeroService.partialUpdateHero")
 	public Uni<Hero> partialUpdateHero(@SpanAttribute("arg.hero") @NotNull Hero hero) {
     Log.debugf("Partially updating hero: %s", hero);
@@ -96,7 +87,6 @@ public class HeroService {
 			.onItem().ifNotNull().transform(this::validatePartialUpdate);
 	}
 
-  @WithTransaction
   @WithSpan("HeroService.replaceAllHeroes")
   public Uni<Void> replaceAllHeroes(@SpanAttribute("arg.heroes") List<Hero> heroes) {
     Log.debug("Replacing all heroes");
@@ -120,7 +110,6 @@ public class HeroService {
 		return hero;
 	}
 
-	@WithTransaction
   @WithSpan("HeroService.deleteAllHeroes")
 	public Uni<Void> deleteAllHeroes() {
     Log.debug("Deleting all heroes");
@@ -132,7 +121,6 @@ public class HeroService {
 			.replaceWithVoid();
 	}
 
-	@WithTransaction
   @WithSpan("HeroService.deleteHero")
 	public Uni<Void> deleteHero(@SpanAttribute("arg.id") Long id) {
     Log.debugf("Deleting hero by id = %d", id);
