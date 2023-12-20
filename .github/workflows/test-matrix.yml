@@ -11,6 +11,9 @@ jobs:
       matrix:
         java:
           - '17'
+        arch:
+          - amd64
+          - arm64
         project:
           - { name: event-statistics }
           - { name: rest-fights }
@@ -47,14 +50,14 @@ jobs:
         #     openai-type: azure-openai
         #   - project: rest-narration
         #     openai-type: ""
-    name: "build-test-${{ matrix.project.name }}-${{ matrix.java }}-${{ matrix.project.openai-type }}"
+    name: "[${{ matrix.arch }}] - build-test-${{ matrix.project.name }}-${{ matrix.java }}-${{ matrix.project.openai-type }}"
     steps:
       - uses: actions/checkout@v4
 
       - name: Show common
         if: matrix.project.openai-type == ''
-        run: echo "Running for project = ${{ matrix.project.name }} and java = ${{ matrix.java }}"
+        run: echo "arch = ${{ matrix.arch }}, project = ${{ matrix.project.name }}, java = ${{ matrix.java }}"
 
       - name: Show specific
         if: matrix.project.openai-type
-        run: echo "Project = ${{ matrix.project.name }}, java = ${{ matrix.java }}, openai-type = ${{ matrix.project.openai-type }}"
+        run: echo "arch = ${{ matrix.arch }}, project = ${{ matrix.project.name }}, java = ${{ matrix.java }}, openai-type = ${{ matrix.project.openai-type }}"
