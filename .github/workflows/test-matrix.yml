@@ -26,9 +26,9 @@ jobs:
             # openai-type: ""
         include:
           - project: rest-narration
-            openai-type: openai
-          - project: rest-narration
-            openai-type: azure-openai
+            openai-type: [openai,azure-openai]
+          # - project: rest-narration
+            # openai-type: azure-openai
         # exclude:
         #   - project: event-statistics
         #     openai-type: openai
