@@ -12,23 +12,14 @@ jobs:
         java:
           - '17'
         project:
-          - event-statistics
-          - rest-fights
-          - rest-heroes
-          - rest-villains
-          - rest-narration
-          - grpc-locations
-          - ui-super-heroes
-        # openai-type:
-        #   - ""
-        # exclude:
-          # - project: rest-narration
-            # openai-type: ""
-        include:
-          - project: rest-narration
-            openai: true
-          - project: rest-narration
-            azure-openai: true
+          - { name: event-statistics }
+          - { name: rest-fights }
+          - { name: rest-heroes }
+          - { name: rest-villains }
+          - { name: rest-narration, openai-type: openai }
+          - { name: rest-narration, openai-type: azure-openai }
+          - { name: grpc-locations }
+          - { name: ui-super-heroes }
         # exclude:
         #   - project: event-statistics
         #     openai-type: openai
