@@ -20,36 +20,42 @@ jobs:
           - grpc-locations
           - ui-super-heroes
         openai-type:
-          - openai
-          - azure-openai
           - ""
         exclude:
-          - project: event-statistics
-            openai-type: openai
-          - project: event-statistics
-            openai-type: azure-openai
-          - project: rest-fights
-            openai-type: openai
-          - project: rest-fights
-            openai-type: azure-openai
-          - project: rest-heroes
-            openai-type: openai
-          - project: rest-heroes
-            openai-type: azure-openai
-          - project: rest-villains
-            openai-type: openai
-          - project: rest-villains
-            openai-type: azure-openai
-          - project: grpc-locations
-            openai-type: openai
-          - project: grpc-locations
-            openai-type: azure-openai
-          - project: ui-super-heroes
-            openai-type: openai
-          - project: ui-super-heroes
-            openai-type: azure-openai
           - project: rest-narration
             openai-type: ""
+        include:
+          - project: rest-narration
+            openai-type: openai
+          - project: rest-narration
+            openai-type: azure-openai
+        # exclude:
+        #   - project: event-statistics
+        #     openai-type: openai
+        #   - project: event-statistics
+        #     openai-type: azure-openai
+        #   - project: rest-fights
+        #     openai-type: openai
+        #   - project: rest-fights
+        #     openai-type: azure-openai
+        #   - project: rest-heroes
+        #     openai-type: openai
+        #   - project: rest-heroes
+        #     openai-type: azure-openai
+        #   - project: rest-villains
+        #     openai-type: openai
+        #   - project: rest-villains
+        #     openai-type: azure-openai
+        #   - project: grpc-locations
+        #     openai-type: openai
+        #   - project: grpc-locations
+        #     openai-type: azure-openai
+        #   - project: ui-super-heroes
+        #     openai-type: openai
+        #   - project: ui-super-heroes
+        #     openai-type: azure-openai
+        #   - project: rest-narration
+        #     openai-type: ""
     name: "build-test-${{ matrix.project }}-${{ matrix.java }}-${{ matrix.openai-type }}"
     steps:
       - uses: actions/checkout@v4
