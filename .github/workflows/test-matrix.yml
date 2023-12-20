@@ -24,7 +24,7 @@ jobs:
             openai-type: openai
           - project: rest-narration
             openai-type: azure-openai
-    name: "build-test-${{ matrix.project }}-${{ matrix.java }}"
+    name: "build-test-${{ matrix.project }}-${{ matrix.java }}-${{ matrix.openai-type }}"
     steps:
       - uses: actions/checkout@v4
 
@@ -33,4 +33,4 @@ jobs:
 
       - name: Show specific
         if: matrix.openai-type
-        run: echo "Project = ${{ matrix.project }}, java = ${{ matrix.java }}, openai-type = ${{ matrix.openai-type }}
+        run: echo "Project = ${{ matrix.project }}, java = ${{ matrix.java }}, openai-type = ${{ matrix.openai-type }}"
