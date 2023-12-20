@@ -47,13 +47,13 @@ jobs:
         #     openai-type: azure-openai
         #   - project: rest-narration
         #     openai-type: ""
-    name: "build-test-${{ matrix.project }}-${{ matrix.java }}-${{ matrix.openai-type }}"
+    name: "build-test-${{ matrix.project.name }}-${{ matrix.java }}-${{ matrix.project.openai-type }}"
     steps:
       - uses: actions/checkout@v4
 
       - name: Show common
-        run: echo "Running for project = ${{ matrix.project }} and java = ${{ matrix.java }}"
+        run: echo "Running for project = ${{ matrix.project.name }} and java = ${{ matrix.java }}"
 
       - name: Show specific
-        if: matrix.openai-type
-        run: echo "Project = ${{ matrix.project }}, java = ${{ matrix.java }}, openai = ${{ matrix.openai }}, azure-openai = ${{ matrix.azure-openai }}"
+        if: matrix.project.openai-type
+        run: echo "Project = ${{ matrix.project.name }}, java = ${{ matrix.java }}, openai-type = ${{ matrix.project.openai-type }}"
