@@ -26,9 +26,9 @@ jobs:
             # openai-type: ""
         include:
           - project: rest-narration
-            openai-type: [openai,azure-openai]
-          # - project: rest-narration
-            # openai-type: azure-openai
+            openai: true
+          - project: rest-narration
+            azure-openai: true
         # exclude:
         #   - project: event-statistics
         #     openai-type: openai
@@ -65,4 +65,4 @@ jobs:
 
       - name: Show specific
         if: matrix.openai-type
-        run: echo "Project = ${{ matrix.project }}, java = ${{ matrix.java }}, openai-type = ${{ matrix.openai-type }}"
+        run: echo "Project = ${{ matrix.project }}, java = ${{ matrix.java }}, openai = ${{ matrix.openai }}, azure-openai = ${{ matrix.azure-openai }}"
