@@ -1,0 +1,26 @@
+name: Test matrix
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        java:
+          - '17'
+        project:
+          - event-statistics
+          - rest-fights
+          - rest-heroes
+          - rest-villains
+          - rest-narration
+          - grpc-locations
+          - ui-super-heroes
+    name: "build-test-${{ matrix.project }}-${{ matrix.java }}"
+    steps:
+      - uses: actions/checkout@v4
+
+      - run: echo "Running for project = ${{ matrix.project }} and java = ${{ matrix.java }}"
