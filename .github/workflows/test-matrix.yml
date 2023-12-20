@@ -19,11 +19,11 @@ jobs:
           - rest-narration
           - grpc-locations
           - ui-super-heroes
-        openai-type:
-          - ""
-        exclude:
-          - project: rest-narration
-            openai-type: ""
+        # openai-type:
+        #   - ""
+        # exclude:
+          # - project: rest-narration
+            # openai-type: ""
         include:
           - project: rest-narration
             openai-type: openai
