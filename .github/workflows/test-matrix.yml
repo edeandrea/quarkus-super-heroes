@@ -52,6 +52,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Show common
+        if: !matrix.project.openai-type
         run: echo "Running for project = ${{ matrix.project.name }} and java = ${{ matrix.java }}"
 
       - name: Show specific
