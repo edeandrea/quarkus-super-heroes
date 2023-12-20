@@ -19,8 +19,18 @@ jobs:
           - rest-narration
           - grpc-locations
           - ui-super-heroes
+        include:
+          - project: rest-narration
+            openai-type: openai
+          - project: rest-narration
+            openai-type: azure-openai
     name: "build-test-${{ matrix.project }}-${{ matrix.java }}"
     steps:
       - uses: actions/checkout@v4
 
-      - run: echo "Running for project = ${{ matrix.project }} and java = ${{ matrix.java }}"
+      - name: Show common
+        run: echo "Running for project = ${{ matrix.project }} and java = ${{ matrix.java }}"
+
+      - name: Show specific
+        if: matrix.openai-type
+        run: echo "Project = ${{ matrix.project }}, java = ${{ matrix.java }}, openai-type = ${{ matrix.openai-type }}
