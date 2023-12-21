@@ -23,7 +23,7 @@ jobs:
           - rest-narration
     name: "Create app multiarch manifests (${{ matrix.project }}-${{ matrix.kind }}java${{ matrix.java }})"
     steps:
-        - name: Calculate Branch (workflow_run)
+      - name: Calculate Branch (workflow_run)
         if: github.event_name == 'workflow_run'
         run: |
           echo "REF=${{ github.event.workflow_run.head_commit.id }}" >> $GITHUB_ENV
