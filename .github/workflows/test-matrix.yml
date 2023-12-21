@@ -18,17 +18,28 @@ jobs:
           - rest-narration
     name: "Create app multiarch manifests (${{ matrix.project }}-${{ matrix.kind }}java${{ matrix.java }})"
     steps:
-      - name: Print stuff
+      - name: Stuff
         shell: bash
         run: |
-          echo "java = ${{ matrix.java }}, kind = ${{ matrix.kind }}, project = ${{ matrix.project }}"
-
           openai_types=("openai" "azure-openai")
+          platforms=("linux/amd64" "linux/arm64")
           
           for openaiType in "${openai_types[@]}"
           do
-            echo "openai-type = ${openaiType}"
+            openai_type_container_tag="${{ env.CONTAINER_TAG }}-${openaiType}"
+            openai_type_additional_tag="${{ env.ADDITIONAL_TAG }}-${openaiType}"
+          
+            for platform in "${platforms[@]}"
+            do
+              echo "docker pull --platform $platform ${{ env.IMAGE_BASE_NAME }}/${{ matrix.project }}:$openai_type_container_tag"
+              echo "docker pull --platform $platform ${{ env.IMAGE_BASE_NAME }}/${{ matrix.project }}:$openai_type_additional_tag"
+            done
+          
+            echo "docker tag ${{ env.IMAGE_BASE_NAME }}/${{ matrix.project }}:$openai_type_container_tag ${{ env.IMAGE_BASE_NAME }}/${{ matrix.project }}:${{ env.CONTAINER_TAG }}"
+            echo "docker tag ${{ env.IMAGE_BASE_NAME }}/${{ matrix.project }}:$openai_type_additional_tag ${{ env.IMAGE_BASE_NAME }}/${{ matrix.project }}:${{ env.ADDITIONAL_TAG }}"
           done
+          
+          echo "docker push -a ${{ env.IMAGE_BASE_NAME }}/${{ matrix.project }}"
 
   # test:
   #   runs-on: ubuntu-latest
