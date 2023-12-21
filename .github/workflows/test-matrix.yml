@@ -79,23 +79,17 @@ jobs:
       - name: Tag images
         shell: bash
         run: |
-          openai_types=("openai" "azure-openai")
-          platforms=("linux/amd64" "linux/arm64")
-          
-          for openaiType in "${openai_types[@]}"
+          openai_type_container_tag="${{ env.CONTAINER_TAG }}-openai"
+          openai_type_additional_tag="${{ env.ADDITIONAL_TAG }}-openai"
+        
+          for platform in "linux/amd64" "linux/arm64"
           do
-            openai_type_container_tag="${{ env.CONTAINER_TAG }}-${openaiType}"
-            openai_type_additional_tag="${{ env.ADDITIONAL_TAG }}-${openaiType}"
-          
-            for platform in "${platforms[@]}"
-            do
-              echo "docker pull --platform $platform ${{ env.IMAGE_BASE_NAME }}/${{ matrix.project }}:$openai_type_container_tag"
-              echo "docker pull --platform $platform ${{ env.IMAGE_BASE_NAME }}/${{ matrix.project }}:$openai_type_additional_tag"
-            done
-          
-            echo "docker tag ${{ env.IMAGE_BASE_NAME }}/${{ matrix.project }}:$openai_type_container_tag ${{ env.IMAGE_BASE_NAME }}/${{ matrix.project }}:${{ env.CONTAINER_TAG }}"
-            echo "docker tag ${{ env.IMAGE_BASE_NAME }}/${{ matrix.project }}:$openai_type_additional_tag ${{ env.IMAGE_BASE_NAME }}/${{ matrix.project }}:${{ env.ADDITIONAL_TAG }}"
+            echo "docker pull --platform $platform ${{ env.IMAGE_BASE_NAME }}/${{ matrix.project }}:$openai_type_container_tag"
+            echo "docker pull --platform $platform ${{ env.IMAGE_BASE_NAME }}/${{ matrix.project }}:$openai_type_additional_tag"
           done
+        
+          echo "docker tag ${{ env.IMAGE_BASE_NAME }}/${{ matrix.project }}:$openai_type_container_tag ${{ env.IMAGE_BASE_NAME }}/${{ matrix.project }}:${{ env.CONTAINER_TAG }}"
+          echo "docker tag ${{ env.IMAGE_BASE_NAME }}/${{ matrix.project }}:$openai_type_additional_tag ${{ env.IMAGE_BASE_NAME }}/${{ matrix.project }}:${{ env.ADDITIONAL_TAG }}"
           
           echo "docker push -a ${{ env.IMAGE_BASE_NAME }}/${{ matrix.project }}"
 
