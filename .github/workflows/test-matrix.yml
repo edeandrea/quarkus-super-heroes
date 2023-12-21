@@ -22,6 +22,8 @@ jobs:
         run: |
           echo "java = ${{ matrix.java }}, kind = ${{ matrix.kind }}, project = ${{ matrix.project.name }}"
 
+          arr = ${{ matrix.project.openai-types }}
+          echo "Number of elements = ${#arr[@]}"
           for t in ${{ matrix.project.openai-types }}[@]; do
             echo "openai-type = $t"
           done
