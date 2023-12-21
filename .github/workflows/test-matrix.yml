@@ -15,18 +15,19 @@ jobs:
           - ""
           - 'native-'
         project:
-          - { name: rest-narration, openai-types: ['openai','azure-openai'] }
-    name: "Create app multiarch manifests (${{ matrix.project.name }}-${{ matrix.kind }}java${{ matrix.java }}-${{ matrix.project.openai-types }})"
+          - rest-narration
+    name: "Create app multiarch manifests (${{ matrix.project }}-${{ matrix.kind }}java${{ matrix.java }})"
     steps:
       - name: Print stuff
         shell: bash
         run: |
-          echo "java = ${{ matrix.java }}, kind = ${{ matrix.kind }}, project = ${{ matrix.project.name }}"
+          echo "java = ${{ matrix.java }}, kind = ${{ matrix.kind }}, project = ${{ matrix.project }}"
 
-          arr = ${{ matrix.project.openai-types }}
-          echo "Number of elements = ${#arr[@]}"
-          for t in ${{ matrix.project.openai-types }}[@]; do
-            echo "openai-type = $t"
+          openai_types=("openai" "azure-openai")
+          
+          for openaiType in "${openai_types[@]}"
+          do
+            echo "openai-type = ${openaiType}"
           done
 
   # test:
