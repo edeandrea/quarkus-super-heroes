@@ -1,5 +1,10 @@
 name: Test matrix
 
+env:
+  IMAGE_BASE_NAME: "quay.io/quarkus-super-heroes"
+  MANDREL_IMAGE: "quay.io/quarkus/ubi-quarkus-mandrel-builder-image"
+  LATEST_IMAGE_TAG: "latest"
+
 on:
   workflow_dispatch:
 
@@ -18,7 +23,55 @@ jobs:
           - rest-narration
     name: "Create app multiarch manifests (${{ matrix.project }}-${{ matrix.kind }}java${{ matrix.java }})"
     steps:
-      - name: Stuff
+        - name: Calculate Branch (workflow_run)
+        if: github.event_name == 'workflow_run'
+        run: |
+          echo "REF=${{ github.event.workflow_run.head_commit.id }}" >> $GITHUB_ENV
+          echo "BRANCH=${{ github.event.workflow_run.head_branch }}" >> $GITHUB_ENV
+
+      - name: Calculate Branch (workflow_dispatch event)
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          echo "REF=${{ github.sha }}" >> $GITHUB_ENV
+          echo "BRANCH=${{ github.ref_name }}" >> $GITHUB_ENV
+
+      - name: Create env vars
+        working-directory: ${{ matrix.project }}
+        run: |
+          echo "QUARKUS_VERSION=3.6.4" >> $GITHUB_ENV &&
+          echo "APP_VERSION=1.0" >> $GITHUB_ENV
+
+      - name: Create Container tags (JVM)
+        if: matrix.kind == ''
+        working-directory: ${{ matrix.project }}
+        run: echo "CONTAINER_TAG=${{ env.APP_VERSION }}-quarkus-${{ env.QUARKUS_VERSION }}-${{ matrix.kind }}java${{ matrix.java }}" >> $GITHUB_ENV
+
+      - name: Create CONTAINER_TAG (native)
+        if: matrix.kind == 'native-'
+        working-directory: ${{ matrix.project }}
+        run: echo "CONTAINER_TAG=${{ env.APP_VERSION }}-quarkus-${{ env.QUARKUS_VERSION }}-native" >> $GITHUB_ENV
+
+      - name: Create ADDITIONAL_TAG (JVM - main branch)
+        if: (env.BRANCH == 'main') && (matrix.kind == '')
+        working-directory: ${{ matrix.project }}
+        run: echo "ADDITIONAL_TAG=${{ matrix.kind }}java${{ matrix.java }}-${{ env.LATEST_IMAGE_TAG }}" >> $GITHUB_ENV
+
+      - name: Create ADDITIONAL_TAG (JVM - other branch)
+        if: (env.BRANCH != 'main') && (matrix.kind == '')
+        working-directory: ${{ matrix.project }}
+        run: echo "ADDITIONAL_TAG=${{ matrix.kind }}java${{ matrix.java }}-${{ env.LATEST_IMAGE_TAG }}-${{ env.BRANCH }}" >> $GITHUB_ENV
+
+      - name: Create ADDITIONAL_TAG (Native - main branch)
+        if: (env.BRANCH == 'main') && (matrix.kind == 'native-')
+        working-directory: ${{ matrix.project }}
+        run: echo "ADDITIONAL_TAG=${{ matrix.kind }}${{ env.LATEST_IMAGE_TAG }}" >> $GITHUB_ENV
+
+      - name: Create ADDITIONAL_TAG (Native - other branch)
+        if: (env.BRANCH != 'main') && (matrix.kind == 'native-')
+        working-directory: ${{ matrix.project }}
+        run: echo "ADDITIONAL_TAG=${{ matrix.kind }}${{ env.LATEST_IMAGE_TAG }}-${{ env.BRANCH }}" >> $GITHUB_ENV
+      
+      - name: Tag images
         shell: bash
         run: |
           openai_types=("openai" "azure-openai")
