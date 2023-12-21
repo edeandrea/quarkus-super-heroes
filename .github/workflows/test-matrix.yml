@@ -15,7 +15,7 @@ jobs:
           - ""
           - 'native-'
         project:
-          - { name: rest-narration, openai-types: [openai,azure-openai] }
+          - { name: rest-narration, openai-types: ['openai','azure-openai'] }
     name: "Create app multiarch manifests (${{ matrix.project.name }}-${{ matrix.kind }}java${{ matrix.java }}-${{ matrix.project.openai-types }})"
     steps:
       - name: Print stuff
