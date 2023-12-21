@@ -35,6 +35,11 @@ jobs:
           echo "REF=${{ github.sha }}" >> $GITHUB_ENV
           echo "BRANCH=${{ github.ref_name }}" >> $GITHUB_ENV
 
+      - name: Checkout from ${{ env.REF }}
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.REF }}
+
       - name: Create env vars
         working-directory: ${{ matrix.project }}
         run: |
