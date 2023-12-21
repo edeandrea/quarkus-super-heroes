@@ -22,7 +22,7 @@ jobs:
         run: |
           echo "java = ${{ matrix.java }}, kind = ${{ matrix.kind }}, project = ${{ matrix.project.name }}"
 
-          for t in ${openai-types[@]}; do
+          for t in ${{ matrix.project.openai-types }}[@]; do
             echo "openai-type = $t"
           done
 
