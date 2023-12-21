@@ -19,7 +19,12 @@ jobs:
     name: "Create app multiarch manifests (${{ matrix.project.name }}-${{ matrix.kind }}java${{ matrix.java }}-${{ matrix.project.openai-types }})"
     steps:
       - name: Print stuff
-        run: echo "java = ${{ matrix.java }}, kind = ${{ matrix.kind }}, project = ${{ matrix.project.name }}, openai-types = ${{ matrix.project.openai-types }}"
+        run: |
+          echo "java = ${{ matrix.java }}, kind = ${{ matrix.kind }}, project = ${{ matrix.project.name }}"
+
+          for t in ${openai-types[@]}; do
+            echo "openai-type = $t"
+          done
 
   # test:
   #   runs-on: ubuntu-latest
