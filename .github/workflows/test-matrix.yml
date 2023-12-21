@@ -19,6 +19,7 @@ jobs:
     name: "Create app multiarch manifests (${{ matrix.project.name }}-${{ matrix.kind }}java${{ matrix.java }}-${{ matrix.project.openai-types }})"
     steps:
       - name: Print stuff
+        shell: bash
         run: |
           echo "java = ${{ matrix.java }}, kind = ${{ matrix.kind }}, project = ${{ matrix.project.name }}"
 
