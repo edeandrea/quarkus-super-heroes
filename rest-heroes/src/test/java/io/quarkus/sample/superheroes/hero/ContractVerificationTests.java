@@ -1,9 +1,6 @@
 package io.quarkus.sample.superheroes.hero;
 
-import static org.mockito.Mockito.doReturn;
-
-import java.util.List;
-import java.util.Optional;
+import java.time.Duration;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,7 +20,6 @@ import au.com.dius.pact.provider.junitsupport.State;
 import au.com.dius.pact.provider.junitsupport.loader.PactBrokerConsumerVersionSelectors;
 import au.com.dius.pact.provider.junitsupport.loader.PactFolder;
 import au.com.dius.pact.provider.junitsupport.loader.SelectorBuilder;
-import io.smallrye.mutiny.Uni;
 
 @QuarkusTest
 @Provider("rest-heroes")
@@ -50,20 +46,6 @@ public class ContractVerificationTests {
   @BeforeEach
   void beforeEach(PactVerificationContext context) {
     context.setTarget(new HttpTestTarget("localhost", this.quarkusPort));
-
-    // Have to do this here because the CDI context doesn't seem to be available
-    // in the @State method below
-    var isNoRandomHeroFoundState = Optional.ofNullable(context.getInteraction().getProviderStates())
-      .orElseGet(List::of)
-      .stream()
-      .filter(state -> NO_RANDOM_HERO_FOUND_STATE.equals(state.getName()))
-      .count() > 0;
-
-    if (isNoRandomHeroFoundState) {
-      doReturn(Uni.createFrom().nullItem())
-        .when(this.heroRepository)
-        .findRandom();
-    }
   }
 
   @PactBrokerConsumerVersionSelectors
@@ -74,6 +56,8 @@ public class ContractVerificationTests {
 
   @State(NO_RANDOM_HERO_FOUND_STATE)
   public void clearData() {
-    // Already handled in beforeEach
+    this.heroRepository.deleteAll()
+      .await()
+      .atMost(Duration.ofSeconds(10));
   }
 }
